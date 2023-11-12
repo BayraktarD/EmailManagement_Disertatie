@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "+iYGyTPka+8hH0N4fz64A+03P/94hkPWUBxyAqmiws4=",
+  "Source": "EmailMngmntApi",
+  "BasePath": "_content/EmailMngmntApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
