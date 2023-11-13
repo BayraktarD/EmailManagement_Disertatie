@@ -1,4 +1,5 @@
 export class ILogin{
-  username:string|null|undefined;
-  password:string|null|undefined;
+  username!: string;
+  password!: string;
+  emailAddress!: string;
 }

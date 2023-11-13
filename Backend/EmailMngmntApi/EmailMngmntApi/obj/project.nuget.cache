@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "MrOWmUWlQxdTfj1nnFHEs6LXXFK34nVGRnqiVPjLhTguHJNh4TbNu8tMnb+2cK+kerH4f3B19Wh4d9vY+ORT1A==",
+  "dgSpecHash": "ybDplIAvc96QFYHspa4sCPMvmPjtko2GHsqTWf7APfKKFE/8U3c65zksWVFaFnea6lEVBlKatq9yiQz13YR63g==",
   "success": true,
   "projectFilePath": "D:\\Proiecte\\GitHub\\EmailManagement_Disertatie\\Backend\\EmailMngmntApi\\EmailMngmntApi\\EmailMngmntApi.csproj",
   "expectedPackageFiles": [
@@ -36,6 +36,7 @@
     "C:\\Users\\dorin.bayraktar\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
     "C:\\Users\\dorin.bayraktar\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
     "C:\\Users\\dorin.bayraktar\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",
+    "C:\\Users\\dorin.bayraktar\\.nuget\\packages\\portable.bouncycastle\\1.9.0\\portable.bouncycastle.1.9.0.nupkg.sha512",
     "C:\\Users\\dorin.bayraktar\\.nuget\\packages\\swashbuckle.aspnetcore\\6.5.0\\swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
     "C:\\Users\\dorin.bayraktar\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.5.0\\swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
     "C:\\Users\\dorin.bayraktar\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.5.0\\swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",

@@ -2,6 +2,7 @@
 using EmailMngmntApi.Interfaces.Repositories;
 using EmailMngmntApi.Interfaces.Services;
 using EmailMngmntApi.Repositories;
+using EmailMngmntApi.RSA;
 using EmailMngmntApi.Services;
 
 namespace EmailMngmntApi.Configuration.DependencyInjection
@@ -22,6 +23,7 @@ namespace EmailMngmntApi.Configuration.DependencyInjection
         public static void SERVICE_DI_Configuration(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRSAHelper, RSAHelper>();
         }
 
       

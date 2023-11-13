@@ -12,8 +12,9 @@ import { TokenStorageService } from 'src/app/services/token-storage.service';
 export class LoginComponent implements OnInit {
 
   loginData: ILogin = {
-    username: null,
-    password: null
+    username: "",
+    password: "",
+    emailAddress:""
   };
 
   isLoggedIn = false;
@@ -30,16 +31,22 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(this.loginData).subscribe(
       data => {
-        this.tokenStorage.saveToken(data);
-        this.tokenStorage.saveUser(data);
+        if(data.length>0){
+          this.tokenStorage.saveToken(data);
+          this.tokenStorage.saveUser(data);
 
-        this.isLoginFailed = false;
-        this.isLoggedIn = true;
-        this.roles = this.tokenStorage.getUser().roles;
-        this.reloadPage();
+          this.isLoginFailed = false;
+          this.isLoggedIn = true;
+          this.roles = this.tokenStorage.getUser().roles;
+          this.reloadPage();
+        }
+        else{
+          this.errorMessage = "Login failed!"
+          this.isLoginFailed = true;
+        }
       },
       err => {
-        this.errorMessage = err.error.message;
+        this.errorMessage = err.error;
         this.isLoginFailed = true;
       }
     );

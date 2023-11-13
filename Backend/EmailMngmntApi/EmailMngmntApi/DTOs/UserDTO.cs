@@ -27,7 +27,6 @@ namespace EmailMngmntApi.DTOs
             ClientAppId = user.ClientAppId;
             FirstName = user.FirstName;
             LastName = user.LastName;
-            UserName = user.UserName;
             EmailAddress = user.EmailAddress;
         }
 

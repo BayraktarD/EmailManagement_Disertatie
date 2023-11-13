@@ -32,7 +32,7 @@ namespace EmailMngmntApi.Controllers
             }
             else
             {
-                return BadRequest(token);
+                return BadRequest("Make sure your username, email and password are entered correctly!");
             }
         }
     }

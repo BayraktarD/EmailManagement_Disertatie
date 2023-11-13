@@ -1,6 +1,7 @@
 ﻿using EmailMngmntApi.DTOs;
 using EmailMngmntApi.Interfaces.Repositories;
 using EmailMngmntApi.Interfaces.Services;
+using EmailMngmntApi.RSA;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -12,23 +13,46 @@ namespace EmailMngmntApi.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
+        private readonly IRSAHelper _rSAHelper;
 
-        public UserService(IUserRepository userRepository, IConfiguration configuration)
+        public UserService(IUserRepository userRepository, IConfiguration configuration, IRSAHelper rSAHelper)
         {
             _userRepository = userRepository;
             _configuration = configuration;
+            _rSAHelper = rSAHelper;
         }
 
         public async Task<bool> CreateAsync(UserDTO userDTO)
         {
-            var passwordHash = CreatePasswordHash(userDTO.Password);
-            return await _userRepository.CreateAsync(userDTO, passwordHash);
+            UserDTO decryptedUserData = new UserDTO();
+
+            decryptedUserData.UserName = _rSAHelper.Decrypt(userDTO.UserName);
+            decryptedUserData.Password = _rSAHelper.Decrypt(userDTO.Password);
+            decryptedUserData.FirstName = _rSAHelper.Decrypt(userDTO.FirstName);
+            decryptedUserData.LastName = _rSAHelper.Decrypt(userDTO.LastName);
+            decryptedUserData.EmailAddress = _rSAHelper.Decrypt(userDTO.EmailAddress);
+
+
+            Login login = new Login()
+            {
+                Username = decryptedUserData.UserName, Password = decryptedUserData.Password
+            };
+
+            var loginHash = CreateLoginHash(login);
+            return await _userRepository.CreateAsync(decryptedUserData, loginHash);
         }
 
         public async Task<string> LoginAsync(Login loginCredentials)
         {
             string jwtToken = string.Empty;
-            var userDTO = await _userRepository.LoginAsync(loginCredentials);
+            Login decryptedLoginCredentials = new Login();
+            decryptedLoginCredentials.Username = _rSAHelper.Decrypt(loginCredentials.Username);
+            decryptedLoginCredentials.Password = _rSAHelper.Decrypt(loginCredentials.Password);
+            decryptedLoginCredentials.EmailAddress = _rSAHelper.Decrypt(loginCredentials.EmailAddress);
+
+
+
+            var userDTO = await _userRepository.LoginAsync(decryptedLoginCredentials);
 
             if (userDTO.UserId != Guid.Empty)
             {
@@ -38,14 +62,20 @@ namespace EmailMngmntApi.Services
             return jwtToken;
         }
 
-        private PasswordHash CreatePasswordHash(string password)
+        private LoginHash CreateLoginHash(Login login)
         {
-            PasswordHash hash = new PasswordHash();
+            LoginHash hash = new LoginHash();
 
             using (var hmac = new HMACSHA512())
             {
-                hash.Salt = hmac.Key;
-                hash.Hash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                hash.PasswordSalt = hmac.Key;
+                hash.PasswordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(login.Password));
+            }
+
+            using (var hmac = new HMACSHA512())
+            {
+                hash.UsernameSalt = hmac.Key;
+                hash.UsernameHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(login.Username));
             }
 
             return hash;
@@ -55,7 +85,7 @@ namespace EmailMngmntApi.Services
         {
             List<Claim> claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Name,userDTO.UserName)
+                new Claim(ClaimTypes.Name,userDTO.FirstName+" "+userDTO.LastName)
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
@@ -64,8 +94,8 @@ namespace EmailMngmntApi.Services
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires:DateTime.Now.AddMinutes(10),
-                signingCredentials:creds);
+                expires: DateTime.Now.AddMinutes(10),
+                signingCredentials: creds);
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 

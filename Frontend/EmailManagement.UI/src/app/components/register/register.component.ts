@@ -10,13 +10,13 @@ import { AuthService } from 'src/app/services/auth.service';
 export class RegisterComponent implements OnInit {
 
   user: IUser = {
-    firstName: null,
-    lastName: null,
-    emailAddress:null,
-    userName: null,
-    password: null,
-    clientAppId:null,
-    userId:null
+    firstName: "",
+    lastName: "",
+    emailAddress:"",
+    userName: "",
+    password: "",
+    clientAppId:"",
+    userId:""
   };
   isSuccessful = false;
   isSignUpFailed = false;

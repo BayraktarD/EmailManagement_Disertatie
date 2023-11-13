@@ -59,13 +59,9 @@ namespace EmailMngmntApi.EntityModels
             {
                 entity.Property(e => e.UserId).ValueGeneratedNever();
 
-                entity.Property(e => e.EmailAddress).HasMaxLength(100);
-
                 entity.Property(e => e.FirstName).HasMaxLength(100);
 
                 entity.Property(e => e.LastName).HasMaxLength(100);
-
-                entity.Property(e => e.UserName).HasMaxLength(100);
 
                 entity.HasOne(d => d.ClientApp)
                     .WithMany(p => p.Users)

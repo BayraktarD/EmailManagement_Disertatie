@@ -9,7 +9,8 @@ namespace EmailMngmntApi.EntityModels
         public Guid? ClientAppId { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-        public string? UserName { get; set; }
+        public byte[]? UsernameHash { get; set; }
+        public byte[]? UsernameSalt { get; set; }
         public string? EmailAddress { get; set; }
         public byte[]? PasswordHash { get; set; }
         public byte[]? PasswordSalt { get; set; }
