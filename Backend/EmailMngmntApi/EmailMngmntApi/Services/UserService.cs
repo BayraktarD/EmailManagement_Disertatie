@@ -59,6 +59,7 @@ namespace EmailMngmntApi.Services
                 jwtToken = CreateToken(userDTO);
             }
 
+
             return jwtToken;
         }
 

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ILogin } from 'src/app/models/ILogin';
 import { IUser } from 'src/app/models/IUser';
 import { AuthService } from 'src/app/services/auth.service';
+import { EncryptDecryptService } from 'src/app/services/encrypt-decrypt.service';
 import { TokenStorageService } from 'src/app/services/token-storage.service';
 
 @Component({
@@ -22,7 +23,7 @@ export class LoginComponent implements OnInit {
   errorMessage = '';
   roles: string[] = [];
 
-  constructor(private authService:AuthService,private tokenStorage: TokenStorageService) { }
+  constructor(private authService:AuthService,private tokenStorage: TokenStorageService, private encryptDecryptService : EncryptDecryptService) { }
 
   ngOnInit(): void {
   }
@@ -30,10 +31,10 @@ export class LoginComponent implements OnInit {
   onSubmit(): void {
 
     this.authService.login(this.loginData).subscribe(
-      data => {
-        if(data.length>0){
-          this.tokenStorage.saveToken(data);
-          this.tokenStorage.saveUser(data);
+      response => {
+        if(response.length>0){
+          this.tokenStorage.saveToken(response);
+          this.tokenStorage.saveUser(response);
 
           this.isLoginFailed = false;
           this.isLoggedIn = true;
@@ -53,7 +54,7 @@ export class LoginComponent implements OnInit {
   }
 
   reloadPage(): void {
-    window.location.reload();
+    window.location.replace("../sent-mails");
   }
 
 }

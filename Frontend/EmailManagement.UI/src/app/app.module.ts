@@ -8,10 +8,12 @@ import { AuthInterceptor } from './services/auth.interceptor';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
+import { SentMailsComponent } from './components/sent-mails/sent-mails.component';
+import { GridAllModule } from '@syncfusion/ej2-angular-grids';
 
 @NgModule({
   declarations: [
-    AppComponent,LoginComponent,RegisterComponent
+    AppComponent,LoginComponent,RegisterComponent, SentMailsComponent
   ],
   imports: [
     BrowserModule,
@@ -19,6 +21,7 @@ import { LoginComponent } from './components/login/login.component';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    GridAllModule
 
   ],
   providers: [{
@@ -29,3 +32,6 @@ import { LoginComponent } from './components/login/login.component';
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+export function getBaseUrl() {
+  return document.getElementsByTagName('base')[0].href;
+}

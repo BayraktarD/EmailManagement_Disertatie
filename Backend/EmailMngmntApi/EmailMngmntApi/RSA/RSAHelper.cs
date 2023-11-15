@@ -10,32 +10,29 @@ namespace EmailMngmntApi.RSA
     public class RSAHelper : IRSAHelper
     {
         private readonly RSACryptoServiceProvider _frontendPrivateKey;
-        private readonly RSACryptoServiceProvider _frontendPublicKey;
+        //private readonly RSACryptoServiceProvider _frontendPublicKey;
 
-        private readonly RSACryptoServiceProvider _dbPrivateKey;
-        private readonly RSACryptoServiceProvider _dbPublicKey;
+        private readonly RSACryptoServiceProvider _backendPublicKey;
 
         public RSAHelper()
         {
-            string frontendPublicKey_pem = @".\keys\front.pub.pem";
+            //string frontendEncryptionPublicKey_pem = @".\keys\front.pub.pem";
             string frontendPrivateKey_pem = @".\keys\front.key.pem";
 
-            string dbPublicKey_pem = @".\keys\db.pub.pem";
-            string dbPrivateKey_pem = @".\keys\db.key.pem";
+            string backendEncryptionPublicKey_pem = @".\keys\backend.pub.pem";
 
             _frontendPrivateKey = GetPrivateKeyFromPemFile(frontendPrivateKey_pem);
-            _frontendPublicKey = GetPublicKeyFromPemFile(frontendPublicKey_pem);
+            //_frontendPublicKey = GetPublicKeyFromPemFile(frontendEncryptionPublicKey_pem);
 
 
-            _dbPrivateKey = GetPrivateKeyFromPemFile(dbPrivateKey_pem);
-            _dbPublicKey = GetPublicKeyFromPemFile(dbPublicKey_pem);
+            _backendPublicKey = GetPublicKeyFromPemFile(backendEncryptionPublicKey_pem);
         }
 
         public string Encrypt(string text)
         {
             try
             {
-                var encryptedBytes = _frontendPublicKey.Encrypt(Encoding.UTF8.GetBytes(text), false);
+                var encryptedBytes = _backendPublicKey.Encrypt(Encoding.UTF8.GetBytes(text), false);
                 return Convert.ToBase64String(encryptedBytes);
             }
             catch (Exception)
@@ -63,7 +60,7 @@ namespace EmailMngmntApi.RSA
         //{
         //    try
         //    {
-        //        var encryptedBytes = _dbPublicKey.Encrypt(Encoding.UTF8.GetBytes(text), false);
+        //        var encryptedBytes = _backendPublicKey.Encrypt(Encoding.UTF8.GetBytes(text), false);
         //        return Convert.ToBase64String(encryptedBytes);
         //    }
         //    catch (Exception)

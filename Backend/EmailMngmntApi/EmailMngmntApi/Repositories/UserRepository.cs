@@ -58,7 +58,8 @@ namespace EmailMngmntApi.Repositories
             try
             {
                 
-                var users = await _db.Users.Where(x => x.EmailAddress == loginCredentials.EmailAddress).ToListAsync();
+                var users = await _db.Users.ToListAsync();
+                var usersWithSameEmailAddress = users.Where(x => x.EmailAddress == loginCredentials.EmailAddress).ToList();
                 if (users.Count > 0)
                 {
                     foreach (var user in users)
