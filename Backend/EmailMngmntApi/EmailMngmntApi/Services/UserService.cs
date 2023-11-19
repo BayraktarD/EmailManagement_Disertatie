@@ -86,7 +86,9 @@ namespace EmailMngmntApi.Services
         {
             List<Claim> claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Name,userDTO.FirstName+" "+userDTO.LastName)
+                new Claim(ClaimTypes.Name,userDTO.FirstName+" "+userDTO.LastName),
+                new Claim(ClaimTypes.Role,"ROLE_ADMIN"),
+                new Claim(ClaimTypes.UserData,userDTO.UserId.ToString()),
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
@@ -95,7 +97,7 @@ namespace EmailMngmntApi.Services
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(10),
+                expires: DateTime.Now.AddMinutes(100),
                 signingCredentials: creds);
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);

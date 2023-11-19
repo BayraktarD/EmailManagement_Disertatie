@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Router } from '@angular/router';
 import { TokenStorageService } from './services/token-storage.service';
 
 @Component({
@@ -6,32 +7,33 @@ import { TokenStorageService } from './services/token-storage.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  private roles: string[] = [];
+export class AppComponent implements OnInit, OnChanges {
   isLoggedIn = false;
   showAdminBoard = false;
   showModeratorBoard = false;
   username?: string;
   title = 'EmailManagement.UI';
 
-  constructor(private tokenStorageService: TokenStorageService) { }
+  constructor(private router: Router,private tokenStorageService: TokenStorageService) { }
+
+  ngOnChanges(changes: SimpleChanges): void{
+    this.isLoggedIn = this.tokenStorageService.getToken()!=null;
+  }
 
   ngOnInit(): void {
-    this.isLoggedIn = !!this.tokenStorageService.getToken();
+    this.isLoggedIn = this.tokenStorageService.getToken()!=null;
 
     if (this.isLoggedIn) {
-      const user = this.tokenStorageService.getUser();
-      this.roles = user.roles;
-
-      this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
-      this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
-
-      this.username = user.username;
+      this.router.navigate(["components/sent-mails"]);
+    }
+    else{
+      this.router.navigate(["components/login"]);
     }
   }
 
   logout(): void {
-    this.tokenStorageService.signOut();
+    this.isLoggedIn = false;
     window.location.reload();
+    this.tokenStorageService.signOut();
   }
 }

@@ -1,24 +1,63 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef } from '@angular/core';
+import { Router } from '@angular/router';
+import { IEmail } from 'src/app/models/IEmail';
+import { AESHelper } from 'src/app/services/aes-helper.service';
+import { EmailsService } from 'src/app/services/emails.service';
+import { RsaHelper } from 'src/app/services/rsa-helper.service';
+import { TokenStorageService } from 'src/app/services/token-storage.service';
 
 @Component({
   selector: 'app-sent-mails',
   templateUrl: './sent-mails.component.html',
   styleUrls: ['./sent-mails.component.css'],
-  template: `<ejs-grid [dataSource]='data' [allowPaging]="true" [allowSorting]="true"
-              [allowFiltering]="true" [pageSettings]="pageSettings">
-              <e-columns>
-                  <e-column field='OrderID' headerText='Order ID' textAlign='Right' width=90></e-column>
-                  <e-column field='CustomerID' headerText='Customer ID' width=120></e-column>
-                  <e-column field='Freight' headerText='Freight' textAlign='Right' format='C2' width=90></e-column>
-                  <e-column field='OrderDate' headerText='Order Date' textAlign='Right' format='yMd' width=120></e-column>
-              </e-columns>
-              </ejs-grid>`
 })
 export class SentMailsComponent implements OnInit {
 
-  constructor() { }
+
+   dataSource=[] as IEmail[];
+
+  selectedRecord={} as IEmail;
+
+
+  constructor(private router: Router, private emailService:EmailsService, private tokenStorage :TokenStorageService,
+    private rsaHelper:RsaHelper, private aesHelper:AESHelper){}
 
   ngOnInit(): void {
+    this.getUserEmails();
+  }
+
+  getUserEmails(){
+    var encryptedEmails = [] as IEmail[];
+    this.emailService.getUserEmails(this.tokenStorage.getUserKey()).subscribe(data=>{
+      data.forEach(email=> {
+        let decryptedAesKey = this.rsaHelper.decrypt(email.aesKey);
+        let decryptedEmail = {
+        } as IEmail;
+        decryptedEmail.content=this.aesHelper.decrypt(email.content,decryptedAesKey);
+        decryptedEmail.title=this.aesHelper.decrypt(email.title,decryptedAesKey);
+        decryptedEmail.from=this.aesHelper.decrypt(email.from,decryptedAesKey);
+        decryptedEmail.to=this.aesHelper.decrypt(email.to,decryptedAesKey);
+        decryptedEmail.userId=this.aesHelper.decrypt(email.userId,decryptedAesKey);
+        decryptedEmail.sentEmailId=this.aesHelper.decrypt(email.sentEmailId,decryptedAesKey);
+
+        this.dataSource.push(decryptedEmail);
+      });
+    });
+
+  }
+
+  sendEmail() {
+    this.router.navigate(["components/sent-mails/add-email-form"]);
+  }
+
+
+
+  deleteEmail() {
+    this.emailService.deleteEmail(this.selectedRecord.sentEmailId)
+  }
+
+  selectRecord(record: any) {
+    this.selectedRecord = record;
   }
 
 }

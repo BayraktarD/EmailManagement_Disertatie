@@ -1,4 +1,5 @@
-﻿using EmailMngmntApi.EntityModels;
+﻿using EmailMngmntApi.AES;
+using EmailMngmntApi.EntityModels;
 using EmailMngmntApi.Interfaces.Repositories;
 using EmailMngmntApi.Interfaces.Services;
 using EmailMngmntApi.Repositories;
@@ -23,13 +24,16 @@ namespace EmailMngmntApi.Configuration.DependencyInjection
         public static void SERVICE_DI_Configuration(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ISentEmailsServices, SentEmailsService>();
             services.AddScoped<IRSAHelper, RSAHelper>();
+            services.AddScoped<IAESHelper, AESHelper>();
         }
 
       
         public static void REPOSITORY_DI_Configuration(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ISentEmailsRepository, SentEmailsRepository>();
 
 
         }

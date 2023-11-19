@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ILogin } from 'src/app/models/ILogin';
 import { IUser } from 'src/app/models/IUser';
 import { AuthService } from 'src/app/services/auth.service';
@@ -23,7 +24,7 @@ export class LoginComponent implements OnInit {
   errorMessage = '';
   roles: string[] = [];
 
-  constructor(private authService:AuthService,private tokenStorage: TokenStorageService, private encryptDecryptService : EncryptDecryptService) { }
+  constructor(private router: Router,private authService:AuthService, private tokenStorage:TokenStorageService) { }
 
   ngOnInit(): void {
   }
@@ -33,13 +34,13 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.loginData).subscribe(
       response => {
         if(response.length>0){
-          this.tokenStorage.saveToken(response);
-          this.tokenStorage.saveUser(response);
 
           this.isLoginFailed = false;
           this.isLoggedIn = true;
-          this.roles = this.tokenStorage.getUser().roles;
+          this.tokenStorage.saveToken(response);
+          this.router.navigate(["components/sent-mails"]);
           this.reloadPage();
+
         }
         else{
           this.errorMessage = "Login failed!"
@@ -53,8 +54,8 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  reloadPage(): void {
-    window.location.replace("../sent-mails");
+ reloadPage(): void {
+    window.location.reload();
   }
 
 }

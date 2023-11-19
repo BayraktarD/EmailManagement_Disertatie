@@ -9,11 +9,18 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
 import { SentMailsComponent } from './components/sent-mails/sent-mails.component';
-import { GridAllModule } from '@syncfusion/ej2-angular-grids';
+import { AgGridModule } from 'ag-grid-angular';
+import { GridModule } from '@progress/kendo-angular-grid';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AddEmailFormComponent } from './components/sent-mails/add-email-form/add-email-form.component';
+
+
+
+
 
 @NgModule({
   declarations: [
-    AppComponent,LoginComponent,RegisterComponent, SentMailsComponent
+    AppComponent,LoginComponent,RegisterComponent, SentMailsComponent,AddEmailFormComponent
   ],
   imports: [
     BrowserModule,
@@ -21,7 +28,11 @@ import { GridAllModule } from '@syncfusion/ej2-angular-grids';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    GridAllModule
+    AgGridModule,
+    GridModule,
+    BrowserAnimationsModule,
+  ],
+  exports:[
 
   ],
   providers: [{
@@ -31,6 +42,8 @@ import { GridAllModule } from '@syncfusion/ej2-angular-grids';
   }],
   bootstrap: [AppComponent]
 })
+
+
 export class AppModule { }
 export function getBaseUrl() {
   return document.getElementsByTagName('base')[0].href;
